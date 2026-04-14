@@ -1,5 +1,9 @@
 <?php
+
+use App\Http\Controllers\Cms\Admin\CityController;
 use App\Http\Controllers\Cms\Admin\CollegeController;
+use App\Http\Controllers\Cms\Admin\SpecializationController;
+use App\Http\Controllers\Front\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,7 +24,27 @@ Route::prefix('cms/admin')->name('admin.')->group(function () {
     Route::view('/certificates', 'cms.admin.cirtificate')->name('certificates');
     Route::view('/notifications', 'cms.admin.notifications')->name('notifications');
 
+ Route::get('colleges/trashed', [CollegeController::class, 'trashed'])->name('colleges.trashed');
+    Route::get('colleges/restore/{id}', [CollegeController::class, 'restore'])->name('colleges.restore');
+    Route::delete('colleges/force/{id}', [CollegeController::class, 'force'])->name('colleges.force');
+    Route::delete('colleges/force-all', [CollegeController::class, 'forceAll'])->name('colleges.forceAll');
+
     Route::resource('colleges', CollegeController::class);
+
+    Route::get('specializations/trashed', [SpecializationController::class, 'trashed'])->name('specializations.trashed');
+    Route::get('specializations/restore/{id}', [SpecializationController::class, 'restore'])->name('specializations.restore');
+    Route::delete('specializations/force/{id}', [SpecializationController::class, 'force'])->name('specializations.force');
+    Route::delete('specializations/force-all', [SpecializationController::class, 'forceAll'])->name('specializations.forceAll');
+
+    Route::resource('specializations', SpecializationController::class);
+
+
+
+    Route::get('cities/trashed', [CityController::class, 'trashed'])->name('cities.trashed');
+    Route::get('cities/restore/{id}', [CityController::class, 'restore'])->name('cities.restore');
+    Route::delete('cities/force/{id}', [CityController::class, 'force'])->name('cities.force');
+
+    Route::resource('cities', CityController::class);
 
 });
 
@@ -42,10 +66,10 @@ Route::get('/register-new', function () {
         return view('front.auth.register-type');
     })->name('front.auth.register-new');
 
+ Route::get('/college-specializations/{college}', [AuthController::class, 'getCollegeSpecializations']);
+Route::get('/register-student', [AuthController::class, 'registerStudent'])
+    ->name('front.auth.register-student');
 
-Route::get('/register-student', function () {
-        return view('front.auth.register-student');
-    })->name('front.auth.register-student');
 });
 
 

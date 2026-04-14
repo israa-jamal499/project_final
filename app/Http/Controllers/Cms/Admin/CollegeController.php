@@ -9,26 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class CollegeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $colleges = College::orderBy('id', 'desc')->paginate(10);
         return view('cms.admin.colleges.index', compact('colleges'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return response()->view('cms.admin.colleges.create');
+        return view('cms.admin.colleges.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -43,40 +34,34 @@ class CollegeController extends Controller
         }
 
         $college = new College();
-        $college->name = $request->get('name');
+        $college->name = $request->name;
         $isSaved = $college->save();
 
         return response()->json([
             'icon' => $isSaved ? 'success' : 'error',
             'title' => $isSaved ? 'Created successfully' : 'Create failed',
+            'redirect' => route('admin.colleges.index'),
         ], $isSaved ? 200 : 400);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $college = College::findOrFail($id);
-        return response()->view('cms.admin.colleges.show', compact('college'));
+        return view('cms.admin.colleges.show', compact('college'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $college = College::findOrFail($id);
-        return response()->view('cms.admin.colleges.edit', compact('college'));
+        return view('cms.admin.colleges.edit', compact('college'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
+        $college = College::findOrFail($id);
+
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|min:3|max:150|unique:colleges,name,' . $id,
+            'name' => 'required|string|min:3|max:150|unique:colleges,name,' . $college->id,
         ]);
 
         if ($validator->fails()) {
@@ -86,26 +71,48 @@ class CollegeController extends Controller
             ], 400);
         }
 
-        $college = College::findOrFail($id);
-        $college->name = $request->get('name');
+        $college->name = $request->name;
         $isUpdated = $college->save();
 
         return response()->json([
             'icon' => $isUpdated ? 'success' : 'error',
             'title' => $isUpdated ? 'Updated successfully' : 'Update failed',
+            'redirect' => route('admin.colleges.index'),
         ], $isUpdated ? 200 : 400);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $isDeleted = College::destroy($id);
+        $college = College::findOrFail($id);
+        $isDeleted = $college->delete();
 
         return response()->json([
             'icon' => $isDeleted ? 'success' : 'error',
             'title' => $isDeleted ? 'Deleted successfully' : 'Delete failed',
         ], $isDeleted ? 200 : 400);
+    }
+
+    public function trashed()
+    {
+        $colleges = College::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        return view('cms.admin.colleges.trashed', compact('colleges'));
+    }
+
+    public function restore($id)
+    {
+        College::onlyTrashed()->findOrFail($id)->restore();
+        return redirect()->back()->with('success', 'Restored successfully');
+    }
+
+    public function force($id)
+    {
+        College::onlyTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->back()->with('success', 'Deleted permanently');
+    }
+
+    public function forceAll()
+    {
+        College::onlyTrashed()->forceDelete();
+        return redirect()->back()->with('success', 'All deleted permanently');
     }
 }

@@ -89,7 +89,21 @@
 .login-link a:hover {
   text-decoration: underline;
 }
-
+.input-group select.form-select {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    padding: 0 15px;
+    background: #f1f5f9;
+    color: #333;
+    font-size: 15px;
+    appearance: none;
+}
+.input-group {
+    margin-bottom: 14px;
+}
   </style>
 
 
@@ -113,12 +127,24 @@
       <div class="input-group">
         <input type="email" placeholder="الرقم الجامعي" required>
       </div>
-     <div class="input-group">
-        <input type="email" placeholder="الكلية" required>
-      </div>
-      <div class="input-group">
-        <input type="text" placeholder="التخصص" required>
-      </div>
+<div class="input-group">
+    <select name="college_id" id="college_id" class="form-select" required>
+        <option value="">اختر الكلية</option>
+        @foreach($colleges as $college)
+            <option value="{{ $college->id }}">{{ $college->name }}</option>
+        @endforeach
+    </select>
+</div>
+<div class="input-group">
+    <select name="specialization_id" id="specialization_id" class="form-select" required>
+        <option value="">اختر التخصص</option>
+        @foreach($specializations as $specialization)
+            <option value="{{ $specialization->id }}" data-college="{{ $specialization->college_id }}">
+                {{ $specialization->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
       <div class="input-group">
         <input type="password" placeholder="كلمة المرور" required>
@@ -143,8 +169,31 @@
 
 </section>
 
-
+@endsection
 
 @section('js')
+<script>
+    document.getElementById('college_id').addEventListener('change', function () {
+        let collegeId = this.value;
+        let specializationSelect = document.getElementById('specialization_id');
+
+        specializationSelect.innerHTML = '<option value="">اختر التخصص</option>';
+
+        if (collegeId === '') {
+            return;
+        }
+
+        fetch(`/front/auth/college-specializations/${collegeId}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(function (specialization) {
+                    specializationSelect.innerHTML += `<option value="${specialization.id}">${specialization.name}</option>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
 @endsection
-@endsection
+

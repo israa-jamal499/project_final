@@ -550,6 +550,8 @@ body {
 <script src="{{ asset('cms/dist/js/cms/main.js') }}"></script>
 <script src="{{ asset('cms/dist/js/cms/supervisor.js') }}"></script>
 <script src="{{ asset('internship/js/admin.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{{ asset('crud.js') }}"></script>
 @yield('scripts')
 </body>
 </html>
