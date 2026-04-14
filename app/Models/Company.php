@@ -30,4 +30,9 @@ class Company extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

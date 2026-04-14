@@ -25,4 +25,9 @@ class Supervisor extends Model
     {
         return $this->belongsTo(College::class);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }
