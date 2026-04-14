@@ -20,4 +20,19 @@ class Student extends Model
         'city_id',
         'college_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function college()
+    {
+        return $this->belongsTo(College::class);
+    }
 }
