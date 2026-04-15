@@ -3,8 +3,11 @@
 use App\Http\Controllers\Cms\Admin\CityController;
 use App\Http\Controllers\Cms\Admin\CollegeController;
 use App\Http\Controllers\Cms\Admin\SpecializationController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,6 +15,9 @@ Route::get('/', function () {
 });
 
 Route::prefix('cms/admin')->name('admin.')->group(function () {
+    Route::resource('student', StudentController::class);
+    Route::resource('compay', CompanyController::class);
+    Route::resource('supervisor', SupervisorController::class);
 
     Route::view('/dashboard', 'cms.admin.dashboard')->name('dashboard');
 
@@ -68,7 +74,6 @@ Route::prefix('front/auth')->group(function () {
     Route::get('/college-specializations/{college}', [AuthController::class, 'getCollegeSpecializations']);
     Route::get('/register-student', [AuthController::class, 'registerStudent'])
         ->name('front.auth.register-student');
-
 });
 
 Route::prefix('front/home')->group(function () {
@@ -91,7 +96,6 @@ Route::prefix('front/home')->group(function () {
     Route::get('/opportunity-details', function () {
         return view('front.home.opportunity-details');
     })->name('front.home.opportunity-details');
-
 });
 
 Route::prefix('front/student')->group(function () {
@@ -131,6 +135,7 @@ Route::prefix('front/student')->group(function () {
         return view('front.student.massege');
     })->name('front.student.massege');
 
+    Route::resource('students', StudentController::class);
 });
 
 Route::prefix('cms/company')->group(function () {
@@ -173,9 +178,11 @@ Route::prefix('cms/company')->group(function () {
     Route::get('/change_password', function () {
         return view('cms.company.change_password');
     })->name('cms.company.change-password');
+
 });
 
 Route::prefix('cms/supervisor')->group(function () {
+    Route::resource('student', StudentController::class);
     Route::view('/parent', 'cms.supervisor.parent')->name('parent');
     Route::get('/dashboard', function () {
         return view('cms.supervisor.dashboard');
@@ -206,4 +213,5 @@ Route::prefix('cms/supervisor')->group(function () {
     Route::get('/change_password', function () {
         return view('cms.supervisor.change_password');
     })->name('cms.supervisor.change-password');
+
 });

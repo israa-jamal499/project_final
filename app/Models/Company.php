@@ -35,4 +35,9 @@ class Company extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function opportunities()
+    {
+        return $this->hasMany(Opportunity::class);
+    }
 }

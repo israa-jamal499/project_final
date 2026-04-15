@@ -23,6 +23,10 @@ class SupervisorController extends Controller
     public function create()
     {
         //
+        $colleges = College::all();
+        $users = User::all();
+
+        return view('cms.admin.student.create', compact('users', 'colleges'));
     }
 
     /**
@@ -31,6 +35,33 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator($request->all(), [
+            'name' => 'sometimes|required|string|min:3|max:50',
+            'phone' => 'required|string|min:10|max:20',
+            'notes' => 'nullable|string',
+            'user->id' => 'required',
+            'colleg->id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $supervisors = new Supervisor;
+            $supervisors->name = $request->get('name');
+            $supervisors->phone = $request->get('phone');
+            $supervisors->notes = $request->get('level');
+            $supervisors->user->id = $request->get('user->id');
+            $supervisors->colleg->id = $request->get('colleg->id');
+            $isSaved = $supervisors->save();
+
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Created successfully ',
+            ], 200);
+        } else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => $validator->getMessageBag()->first(),
+            ], 400);
+        }
     }
 
     /**

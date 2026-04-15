@@ -1,13 +1,13 @@
 @extends('cms.admin.parent')
 
-@section('title','اضافة طالب')
-@section('main-title','اضافة طالب')
+@section('title','اضافة شركة')
+@section('main-title','اضافة شركة')
 
 
 @section('content')
 <div class="card card-primary">
     <div class="card-header">
-        <h3 class="card-title">اضافة طالب جديدة</h3>
+        <h3 class="card-title">اضافة شركة جديدة</h3>
     </div>
 
     <form>
@@ -15,30 +15,33 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label for="name">اسم الطالب</label>
+                    <label for="name">اسم الشركة</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter student name">
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="name">الرقم الجامعي </label>
-                    <input type="text" class="form-control" id="university_id" name="university_id" placeholder="Enter university id">
+                    <label for="name">رقم الهاتف</label>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="name">المستوى</label>
-                    <input type="text" class="form-control" id="level" name="level" placeholder="Enter level">
-                </div>
+
                 <div class="form-group col-md-6">
                     <label for="name">العنوان</label>
                     <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
                 </div>
+
                 <div class="form-group col-md-6">
-                    <label for="name">تاريخ الميلاد</label>
-                    <input type="date" class="form-control" id="birth_date" name="birth_date" placeholder="Enter birth date">
+                    <label for="name">الموقع</label>
+                    <input type="text" class="form-control" id="website" name="website" placeholder="Enter website">
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="name">رقم الهاتف</label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone">
+                    <label for="name"> الوصف </label>
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Enter description">
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="name">المجال </label>
+                    <input type="text" class="form-control" id="field" name="field" placeholder="Enter field">
+                </div>
+
                 <div class="col-md-4">
                 <div class="form-group">
                   <label>الايميل </label>
@@ -52,11 +55,11 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>القسم  </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="user->id" name="user->id" style="width: 100%;">
+                  <label>المدينة </label>
+                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="city->id" name="city->id" style="width: 100%;">
                     {{-- <option selected="selected">Alabama</option> --}}
-                    @foreach ($colleges as $colleg )
-                        <option value="{{ $colleg->id }}">{{ $colleg->colleg_id }}</option>
+                    @foreach ($cities as $city )
+                        <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                     @endforeach
 
 
@@ -72,7 +75,7 @@
 
         <div class="card-footer">
             <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('cms.admin.student') }}" class="btn btn-secondary">Go Back</a>
+            <a href="{{ route('cms.admin.company') }}" class="btn btn-secondary">Go Back</a>
         </div>
     </form>
 </div>
@@ -83,14 +86,14 @@
     function performStore(){
         let formData = new FormData();
         formData.append('name', document.getElementById('name').value);
-        formData.append('university_id', document.getElementById('university_id').value);
-        formData.append('level', document.getElementById('level').value);
-        formData.append('address', document.getElementById('address').value);
-        formData.append('birth_date', document.getElementById('birth_date').value);
         formData.append('phone', document.getElementById('phone').value);
+        formData.append('address', document.getElementById('address').value);
+        formData.append('website', document.getElementById('website').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('field', document.getElementById('field').value);
         formData.append('user->id',document.getElementById('user->id').value);
-        formData.append('colleg->id',document.getElementById('colleg->id').value);
-        store('/front/student/student', formData);
+        formData.append('city_id',document.getElementById('city_id').value);
+        store('/cms/company/company', formData);
     }
 </script>
 @endsection

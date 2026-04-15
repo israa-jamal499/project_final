@@ -72,7 +72,7 @@
 
         <div class="card-footer">
             <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('cms.admin.student') }}" class="btn btn-secondary">Go Back</a>
+            <a href="{{ route('cms.supervisor.dashboard') }}" class="btn btn-secondary">Go Back</a>
         </div>
     </form>
 </div>
@@ -90,7 +90,7 @@
         formData.append('phone', document.getElementById('phone').value);
         formData.append('user->id',document.getElementById('user->id').value);
         formData.append('colleg->id',document.getElementById('colleg->id').value);
-        store('/front/student/student', formData);
+        store('/cms/supervisor/student', formData);
     }
 </script>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -24,12 +25,51 @@ class CompanyController extends Controller
     public function create()
     {
         //
+        $cities = City::all();
+        $users = User::all();
+
+        return view('cms.admin.company.create', compact('users', 'cities'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $validator = Validator($request->all(), [
+            'name' => 'sometimes|required|string|min:3|max:50',
+            'phone' => 'required|string|min:10|max:20',
+            'address' => 'required|string',
+            'website' => 'required|string',
+            'description' => 'required|string',
+            'field' => 'required|string',
+            'user->id' => 'required',
+            'city_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $companies = new Company;
+            $companies->name = $request->get('name');
+            $companies->phone = $request->get('phone');
+            $companies->address = $request->get('address');
+            $companies->website = $request->get('website');
+            $companies->description = $request->get('description');
+            $companies->field = $request->get('field');
+            $companies->user->id = $request->get('user->id');
+            $companies->city_id = $request->get('city_id');
+            $isSaved = $companies->save();
+
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Created successfully ',
+            ], 200);
+        } else {
+            return response()->json([
+                'icon' => 'error',
+                'title' => $validator->getMessageBag()->first(),
+            ], 400);
+        }
+    }
 
     /**
      * Display the specified resource.
