@@ -10,12 +10,4 @@ class College extends Model
      use SoftDeletes;
     protected $fillable = ['name'];
 
-
-    public function specializations()
-    {
-        return $this->hasMany(Specialization::class);
-    }
-
-
-
 }

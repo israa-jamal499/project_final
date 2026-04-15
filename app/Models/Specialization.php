@@ -19,4 +19,9 @@ class Specialization extends Model
     {
         return $this->belongsTo(College::class);
     }
+
+      public function opportunities()
+    {
+        return $this->belongsToMany(Opportunity::class ,'opportunity_specializations');
+    }
 }

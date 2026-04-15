@@ -13,4 +13,5 @@ class City extends Model
         'name',
         'street',
     ];
+
 }
