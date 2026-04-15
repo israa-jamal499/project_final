@@ -35,8 +35,9 @@ class Student extends Model
     {
         return $this->belongsTo(College::class);
     }
-     public function applications()
+
+    public function images()
     {
-        return $this->hasMany(Application::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

@@ -31,8 +31,8 @@ class Company extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function opportunities()
+    public function images()
     {
-        return $this->hasMany(Opportunity::class);
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

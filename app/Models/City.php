@@ -13,9 +13,5 @@ class City extends Model
         'name',
         'street',
     ];
-     public function opportunities()
-    {
-        return $this->hasMany(Opportunity::class);
-    }
 
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Cms\Admin\CityController;
 use App\Http\Controllers\Cms\Admin\CollegeController;
 use App\Http\Controllers\Cms\Admin\SpecializationController;
 use App\Http\Controllers\Front\AuthController;
+use App\Http\Controllers\OpportunityController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,6 +46,12 @@ Route::prefix('cms/admin')->name('admin.')->group(function () {
     Route::delete('cities/force/{id}', [CityController::class, 'force'])->name('cities.force');
 
     Route::resource('cities', CityController::class);
+
+
+    Route::resource('opportunities', OpportunityController::class);
+     Route::post('opportunities-Update/{id}', [OpportunityController::class, 'update'])->name('opportunities.update');
+
+
 
 });
 
