@@ -345,6 +345,8 @@
         <p>ابحثي/فلترّي بسرعة، وأضيفي أو عدّلي بيانات الطلاب من نفس الصفحة.</p>
       </div>
 
+
+
       <div class="head-actions">
         <button class="btn btn-soft" id="seedBtn">✨ تعبئة بيانات تجريبية</button>
         <button class="btn btn-primary" id="addBtn">➕ إضافة طالب</button>
