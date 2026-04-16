@@ -108,7 +108,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('admin.opportunities.edit', $opportunity->id) }}"
+        <a href="{{ route('opportunities.edit', $opportunity->id) }}"
            class="btn btn-primary">تعديل</a>
         <a href="{{ route('opportunities.index') }}"
            class="btn btn-secondary">رجوع</a>

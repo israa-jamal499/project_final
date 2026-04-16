@@ -9,7 +9,7 @@
         <h3 class="card-title">اضافة فرصة جديدة</h3>
     </div>
 
-    <form id="createForm" action="{{ route('admin.opportunities.store') }}" method="POST">
+    <form id="createForm" action="{{ route('opportunities.store') }}" method="POST">
         @csrf
         <div class="card-body">
             <div class="row">
