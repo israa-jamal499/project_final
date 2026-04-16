@@ -1,13 +1,17 @@
 <?php
 
+use App\Http\Controllers\Cms\Admin\AcompanyController;
+use App\Http\Controllers\Cms\Admin\AstudentController;
+use App\Http\Controllers\Cms\Admin\AsuperviosController;
 use App\Http\Controllers\Cms\Admin\CityController;
 use App\Http\Controllers\Cms\Admin\CollegeController;
 use App\Http\Controllers\Cms\Admin\SpecializationController;
-use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Cms\Supervisorms\StudentController as SupervisormsStudentController;
+use App\Http\Controllers\CompanyprofileController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\StudentprofileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,9 +19,9 @@ Route::get('/', function () {
 });
 
 Route::prefix('cms/admin')->name('admin.')->group(function () {
-    Route::resource('student', StudentController::class);
-    Route::resource('compay', CompanyController::class);
-    Route::resource('supervisor', SupervisorController::class);
+    Route::resource('student', AstudentController::class);
+    Route::resource('companies', AcompanyController::class);
+    Route::resource('supervisor', AsuperviosController::class);
 
     Route::view('/dashboard', 'cms.admin.dashboard')->name('dashboard');
 
@@ -99,6 +103,7 @@ Route::prefix('front/home')->group(function () {
 });
 
 Route::prefix('front/student')->group(function () {
+    Route::resource('editProfile', StudentprofileController::class);
 
     Route::get('/applications', function () {
         return view('front.student.applications');
@@ -139,8 +144,10 @@ Route::prefix('front/student')->group(function () {
 });
 
 Route::prefix('cms/company')->group(function () {
+    Route::resource('editProfile', CompanyprofileController::class);
 
     Route::view('/parent', 'cms.company.parent')->name('parent');
+
     Route::get('/dashboard', function () {
         return view('cms.company.dashboard');
     })->name('cms.Company.dashboard');
@@ -182,7 +189,8 @@ Route::prefix('cms/company')->group(function () {
 });
 
 Route::prefix('cms/supervisor')->group(function () {
-    Route::resource('student', StudentController::class);
+    Route::resource('Supervisormsstudent', SupervisormsStudentController::class);
+    Route::resource('editProfile', 'SupervisorprofileController'::class);
     Route::view('/parent', 'cms.supervisor.parent')->name('parent');
     Route::get('/dashboard', function () {
         return view('cms.supervisor.dashboard');

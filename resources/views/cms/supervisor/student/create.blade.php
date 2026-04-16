@@ -72,7 +72,7 @@
 
         <div class="card-footer">
             <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('cms.supervisor.dashboard') }}" class="btn btn-secondary">Go Back</a>
+            <a href="{{ route('Supervisormsstudent.index') }}" class="btn btn-secondary">Go Back</a>
         </div>
     </form>
 </div>
