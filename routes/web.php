@@ -5,6 +5,7 @@ use App\Http\Controllers\Cms\Admin\CollegeController;
 use App\Http\Controllers\Cms\Admin\SpecializationController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\OpportunityController;
+use App\Models\Opportunity;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,7 +16,6 @@ Route::get('/', function () {
 Route::prefix('cms/admin')->name('admin.')->group(function () {
 
     Route::view('/dashboard', 'cms.admin.dashboard')->name('dashboard');
-
     Route::view('/students', 'cms.admin.student')->name('students');
     Route::view('/companies', 'cms.admin.company')->name('companies');
     Route::view('/supervisors', 'cms.admin.supervisor')->name('supervisors');
@@ -47,13 +47,13 @@ Route::prefix('cms/admin')->name('admin.')->group(function () {
 
     Route::resource('cities', CityController::class);
 
-
-    Route::resource('opportunities', OpportunityController::class);
-     Route::post('opportunities-Update/{id}', [OpportunityController::class, 'update'])->name('opportunities.update');
-
-
-
 });
+
+
+
+ Route::resource('opportunities', OpportunityController::class);
+ Route::post('opportunities_update/{id}',[ OpportunityController::class , 'update'])->name('opportunities_update');
+
 
 
 

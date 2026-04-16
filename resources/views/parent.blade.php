@@ -543,7 +543,7 @@ body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/crud.js') }}"></script>
+<script src="{{ asset('crud.js') }}"></script>
 
 @yield('scripts')
 </body>
