@@ -14,9 +14,9 @@ class CompanyprofileController extends Controller
     public function index()
     {
         //
-        $company = Company::withCount('opportunities', 'user', 'college')->orderBy('id')->paginate(4);
+        $company = Company::withCount('city', 'user', 'college')->orderBy('id')->paginate(4);
 
-        return view('cms.company.profile', compact('company'));
+        return view('cms.company.profile', compact('company', 'city'));
     }
 
     /**

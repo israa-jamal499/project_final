@@ -17,11 +17,11 @@ class SupervisorprofileController extends Controller
     {
         //
         $user = Auth::user();
-        $supervisor = $user->getAuthIdentifier('supervisor')->with(['image', 'city', 'college', 'companies'])->first();
+        $supervisor = $user->getAuthIdentifier('supervisor')->with(['image', 'city', 'college', 'company'])->first();
         $cities = City::all();
         $colleges = College::all();
 
-        return view('cms.supervisor.profile', compact('user', 'supervisor', 'cities', 'colleges'));
+        return view('cms.supervisor.profile', compact('user', 'supervisor', 'city', 'college'));
     }
 
     /**
@@ -51,9 +51,14 @@ class SupervisorprofileController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
         //
+        //  $supervisor = Supervisor::with(['user.company'])
+        //     ->where('user_id', auth()->id())
+        //     ->firstOrFail();
+
+        return view('cms.supervisor.profile', compact('user', 'supervisor', 'city', 'college'));
     }
 
     /**

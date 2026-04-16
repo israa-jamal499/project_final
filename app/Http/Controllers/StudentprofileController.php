@@ -22,12 +22,12 @@ class StudentprofileController extends Controller
         // $user = Auth::user();
         // $student = $user->getAuthIdentifier('students')->with(['image', 'city', 'college'])->first();
         $cities = City::all();
-        $users = User::all();
-        $students = $users->student()->with(['image', 'city', 'college'])->first();
+        $user = User::all();
+        $students = $user->student()->with(['image', 'city', 'college', 'specialization'])->first();
         $colleges = College::all();
         $specializations = Specialization::where('is_active', 1)->get();
 
-        return view('front.student.profile', compact('users', 'students', 'cities', 'colleges', 'specializations'));
+        return view('front.student.profile', compact('user', 'students', 'city', 'college', 'specializations'));
     }
 
     /**
@@ -52,6 +52,10 @@ class StudentprofileController extends Controller
     public function show(string $id)
     {
         //
+        $user = Auth::user();
+        $students = auth()->$user->student()->with(['image', 'city', 'college', 'specialization'])->first();
+
+        return view('front.student.profile', compact('user', 'students', 'city', 'college', 'specializations'));
     }
 
     /**
@@ -73,7 +77,7 @@ class StudentprofileController extends Controller
 
         $validator = Validator($request->all(), [
             'name' => 'sometimes|required|string|min:3|max:50',
-            'usrer_id' => 'required|exists:usrer,id',            'phone' => 'nullable|string|max:45',
+            'usrer_id' => 'required|exists:usrer,id',
             'address' => 'nullable|string|max:45',
             'phone' => 'required|string|max:20',
             'birth_date' => 'nullable|date',
