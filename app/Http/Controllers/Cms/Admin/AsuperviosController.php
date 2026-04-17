@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cms\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
+use App\Models\Image;
 use App\Models\Supervisor;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,10 +17,9 @@ class AsuperviosController extends Controller
     public function index()
     {
         //
-        $supervios = Supervisor::withCount('student', 'user', 'college')->orderBy('id')->paginate(4);
+        $supervios = Supervisor::withCount('student')->orderBy('id')->paginate(4);
 
         return view('cms.admin.supervisor.index', compact('supervios'));
-
     }
 
     /**
@@ -29,9 +29,8 @@ class AsuperviosController extends Controller
     {
         //
         $colleges = College::all();
-        $users = User::all();
 
-        return view('cms.admin.supervisor.create', compact('users', 'colleges'));
+        return view('cms.admin.supervisor.create', compact('colleges'));
     }
 
     /**
@@ -44,7 +43,6 @@ class AsuperviosController extends Controller
             'name' => 'sometimes|required|string|min:3|max:50',
             'phone' => 'required|string|min:10|max:20',
             'notes' => 'nullable|string',
-            'user->id' => 'required',
             'colleg->id' => 'required',
         ]);
 
@@ -52,10 +50,22 @@ class AsuperviosController extends Controller
             $supervisors = new Supervisor;
             $supervisors->name = $request->get('name');
             $supervisors->phone = $request->get('phone');
-            $supervisors->notes = $request->get('level');
-            $supervisors->user->id = $request->get('user->id');
+            $supervisors->notes = $request->get('notes');
+            $supervisors->status = $request->get('status');
             $supervisors->colleg->id = $request->get('colleg->id');
             $isSaved = $supervisors->save();
+            if ($isSaved) {
+                $user = new User;
+                $user->email = $request->get('email');
+                $user->password = $request->get('password');
+                $isSaved = $user->save();
+            }
+            if ($isSaved) {
+                $image = new Image;
+                $image->image = $request->get('image');
+                $image->actor()->associate($supervisors);
+                $isSaved = $image->save();
+            }
 
             return response()->json([
                 'icon' => 'success',

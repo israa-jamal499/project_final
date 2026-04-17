@@ -39,28 +39,30 @@
                     <label for="name">رقم الهاتف</label>
                     <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone">
                 </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                  <label>الايميل </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="user->id" name="user->id" style="width: 100%;">
-                    {{-- <option selected="selected">Alabama</option> --}}
-                    @foreach ($users as $user )
-                        <option value="{{ $user->id }}">{{ $user->user_email }}</option>
-                    @endforeach
-
-
-                  </select>
+                 <div class="form-group col-md-6">
+                    <label for="name">الايميل</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter phone">
                 </div>
+
                 <div class="form-group">
                   <label>القسم  </label>
                   <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="user->id" name="user->id" style="width: 100%;">
                     {{-- <option selected="selected">Alabama</option> --}}
                     @foreach ($colleges as $colleg )
-                        <option value="{{ $colleg->id }}">{{ $colleg->colleg_id }}</option>
+                        <option value="{{ $colleg->id }}">{{ $colleg->colleg_name }}</option>
                     @endforeach
 
 
                   </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">كلمة المرور</label>
+                    <input type="text" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                 <div class="form-group col-md-6">
+                    <label for="name">الصورة</label>
+                    <input type="file" class="form-control" id="image" name="image" placeholder="Enter image">
                 </div>
 
                 <!-- /.form-group -->
@@ -72,7 +74,7 @@
 
         <div class="card-footer">
             <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('Supervisormsstudent.index') }}" class="btn btn-secondary">Go Back</a>
+            <a href="{{ route('cms.admin.student') }}" class="btn btn-secondary">Go Back</a>
         </div>
     </form>
 </div>
@@ -88,9 +90,11 @@
         formData.append('address', document.getElementById('address').value);
         formData.append('birth_date', document.getElementById('birth_date').value);
         formData.append('phone', document.getElementById('phone').value);
-        formData.append('user->id',document.getElementById('user->id').value);
+        formData.append('email',document.getElementById('email').value);
         formData.append('colleg->id',document.getElementById('colleg->id').value);
-        store('/cms/supervisor/student', formData);
+        formData.append('password', document.getElementById('password').value);
+        formData.append('image', document.getElementById('image').files[0]);
+        store('/cms/supervisor/student/Supervisormsstudent', formData);
     }
 </script>
 @endsection

@@ -23,6 +23,10 @@
                     <label for="name">رقم الهاتف</label>
                     <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone">
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="name">الايميل</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter phone">
+                </div>
 
                 <div class="form-group col-md-6">
                     <label for="name">العنوان</label>
@@ -42,18 +46,7 @@
                     <input type="text" class="form-control" id="field" name="field" placeholder="Enter field">
                 </div>
 
-                <div class="col-md-4">
-                <div class="form-group">
-                  <label>الايميل </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="user->id" name="user->id" style="width: 100%;">
-                    {{-- <option selected="selected">Alabama</option> --}}
-                    @foreach ($users as $user )
-                        <option value="{{ $user->id }}">{{ $user->user_email }}</option>
-                    @endforeach
 
-
-                  </select>
-                </div>
                 <div class="form-group">
                   <label>المدينة </label>
                   <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="city->id" name="city->id" style="width: 100%;">
@@ -65,6 +58,25 @@
 
                   </select>
                 </div>
+                 <div class="form-group">
+          <label class="form-label">الحالة </label>
+            <select name="status" id="status" class="form-control form-select">
+              <option value="">اختر</option>
+              <option value="active">نشط</option>
+              <option value="pending">انتظار</option>
+              <option value="suspended">معلق</option>
+            </select>
+
+        </div>
+                 <div class="form-group col-md-6">
+                    <label for="name">كلمة المرور</label>
+                    <input type="text" class="form-control" id="password" name="password" placeholder="Enter password">
+                </div>
+
+                 <div class="form-group col-md-6">
+                    <label for="name">الشعار </label>
+                    <input type="file" class="form-control" id="logo" name="logo" placeholder="Enter logo">
+                </div>
 
                 <!-- /.form-group -->
               </div>
@@ -75,7 +87,7 @@
 
         <div class="card-footer">
             <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('cms.admin.company') }}" class="btn btn-secondary">Go Back</a>
+            <a href="{{ route('admin.company.index') }}" class="btn btn-secondary">Go Back</a>
         </div>
     </form>
 </div>
@@ -87,13 +99,16 @@
         let formData = new FormData();
         formData.append('name', document.getElementById('name').value);
         formData.append('phone', document.getElementById('phone').value);
+        formData.append('email', document.getElementById('email').value);
         formData.append('address', document.getElementById('address').value);
         formData.append('website', document.getElementById('website').value);
         formData.append('description', document.getElementById('description').value);
         formData.append('field', document.getElementById('field').value);
-        formData.append('user->id',document.getElementById('user->id').value);
         formData.append('city_id',document.getElementById('city_id').value);
-        store('/cms/company/company', formData);
+        formData.append('status', document.getElementById('status').value);
+        formData.append('password',document.getElementById('password').value);
+        formData.append('logo', document.getElementById('logo').files[0]);
+        store('/cms/admin/company/companies', formData);
     }
 </script>
 @endsection

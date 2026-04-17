@@ -43,10 +43,9 @@
           <td><small style="color:var(--muted)">{{ $company->user->email }}</small></td>
           <td>{{ $company->phone }}</td>
           <td>{{ $company-> opportunities_count}}
-          <td><span class="badge {{ ['active'=>'badge-success','pending'=>'badge-warning','inactive'=>'badge-gray'][$company->status]??'badge-gray' }}">{{ ['active'=>'نشطة','pending'=>'بانتظار','inactive'=>'موقوفة'][$company->status]??'' }}</span></td>
+          <td>{{ $company->status }}</td>
            <td>
-          <a href="{{ route('admin.companies.edit',$company) }}" class="btn btn-outline btn-sm"><i class="fa fa-edit"></i></a>
-          <form action="{{ route('admin.companies.destroy',$company) }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الشركة؟')">@csrf @method('DELETE')<button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></form>
+          <form action="{{ route('admin.companies.destroy') }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الشركة؟')">@csrf @method('DELETE')<button class="btn btn-danger btn-sm"><i class="fa fa-trash">حذف</i></button></form>
         </td>
       </tr>
         </tr>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cms\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\College;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AcompanyController extends Controller
     public function index()
     {
         //
-        $companies = Company::withCount('opportunities', 'user', 'college')->orderBy('id')->paginate(4);
+        $companies = Company::withCount('opportunities')->orderBy('id')->paginate(4);
 
         return view('cms.admin.company.index', compact('companies'));
     }
@@ -28,10 +28,9 @@ class AcompanyController extends Controller
     public function create()
     {
         //
-        $colleges = College::all();
-        $users = User::all();
+        $cities = City::all();
 
-        return view('cms.admin.company.create', compact('users', 'colleges'));
+        return response()->view('cms.admin.company.create', compact('cities'));
     }
 
     /**
@@ -42,53 +41,43 @@ class AcompanyController extends Controller
         //
         $validator = Validator($request->all(), [
             'name' => 'sometimes|required|string|min:3|max:50',
-            'usrer_id' => 'required|exists:usrer,id',
+            'city_id' => 'required|exists:city,id',
             'phone' => 'nullable|string|min:7|max:20',
             'address' => 'nullable|string|min:3|max:255',
             'website' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'field' => 'required|string|min:3|max:50',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
-
-        if (! $validator->fails()) {
-            $company = Company::with('user')->findOrFail($id);
-
-            $company->name = $request->get('name');
-            $company->phone = $request->get('phone');
-            $company->address = $request->get('address');
-            $company->website = $request->get('website');
-            $company->description = $request->get('description');
-            $company->field = $request->get('field');
-
-            $company->user_id = $request->get('user_id');
-            if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('companies', 'public');
-
-                if ($company->image) {
-                    if (Storage::disk('public')->exists($company->image->path)) {
-                        Storage::disk('public')->delete($company->image->path);
-                    }
-
-                    $company->image->delete();
-                }
-
-                $company->image()->create([
-                    'path' => $path,
-                    'type' => 'profile',
-                ]);
+        if ($validator->fails()) {
+            $companies = new Company;
+            $companies->name = $request->get('name');
+            $companies->phone = $request->get('phone');
+            $companies->status = $request->get('status');
+            $companies->website = $request->get('website');
+            $companies->address = $request->get('address');
+            $companies->address = $request->get('field');
+            $companies->description = $request->get('description');
+            $companies->city_id = $request->get('city_id');
+            $companies->logo = $request->get('logo');
+            $isSaved = $companies->save();
+            if ($isSaved) {
+                $user = new User;
+                $user->email = $request->get('email');
+                $user->password = $request->get('password');
+                $isSaved = $user->save();
             }
 
-            $isUpdate = $company->save();
-
-            return redirect()->back()->with('success', 'تم تعديل بيانات الشركة بنجاح');
+            return response()->json([
+                'icon' => 'success',
+                'title' => 'Created successfully ',
+            ], 200);
         } else {
             return response()->json([
                 'icon' => 'error',
                 'title' => $validator->getMessageBag()->first(),
             ], 400);
         }
-
     }
 
     /**

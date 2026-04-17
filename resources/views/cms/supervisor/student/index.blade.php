@@ -28,6 +28,7 @@
             <th>#</th>
             <th>اسم الطالب </th>
             <th>الرقم الجامعي</th>
+            <th>الشركة</th>
             <th>حالة التدريب</th>
             <th>الإجراءات</th>
     </tr>
@@ -38,6 +39,7 @@
           <td>{{ $loop->iteration }}</td>
           <td><strong>{{ $student->name }}</strong></td>
           <td><code>{{ $student->university_id }}</code></td>
+          <td>{{ $student->user->company->name ?? '—' }}</td>
           <td><span class="badge {{ $student->internships->where('status','active')->count() ? 'badge-success' : 'badge-gray' }}">{{ $student->internships->where('status','active')->count() ? 'جاري التدريب' : 'لا يوجد' }}</span></td>
           <td><a href="{{ route('supervisor.student.show',$student) }}" class="btn btn-outline btn-sm"><i class="fa fa-eye"></i> عرض</a></td>
       </tr>
@@ -58,7 +60,7 @@
 @section('scripts')
 <script>
     function performDestroy(id , reference){
-        confirmDestroy('/cms/supervisor/student/' + id , reference);
+        confirmDestroy('/cms/supervisor/student/Supervisormsstudent' + id , reference);
     }
 </script>
 @endsection
