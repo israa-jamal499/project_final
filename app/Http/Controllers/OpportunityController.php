@@ -8,6 +8,8 @@ use App\Models\Company;
 use App\Models\City;
 use Illuminate\Support\Facades\Validator;
 
+
+
 class OpportunityController extends Controller
 {
     /**
@@ -169,5 +171,37 @@ class OpportunityController extends Controller
     {
         //
         $opportunities = Opportunity::destroy($id);
+    }
+
+    public function trashed()
+    {
+        //
+        $opportunities = Opportunity::onlyTrashed()->orderBy('deleted_at' , 'desc')->get();
+        return view('cms.opportunities.trashed',compact('opportunities'));
+
+    }
+
+     public function restore($id)
+    {
+        //
+        $opportunities = Opportunity::onlyTrashed()->findOrFail($id)->restore();
+        return  back() ->with('success' ,'تمت الاستعادة بنجاح');
+
+    }
+
+      public function force($id)
+    {
+        //
+        $opportunities = Opportunity::onlyTrashed()->findOrFail($id)->forceDelete();
+        return  back() ->with('success' ,'تم الحذف بنجاح');
+
+    }
+
+        public function forceAll()
+    {
+        //
+        $opportunities = Opportunity::onlyTrashed()->forceDelete();
+        return  back() ->with('success' ,'تمت عملية حذف جميع العناصر من سلة المحذوفات بنجاح');
+
     }
 }

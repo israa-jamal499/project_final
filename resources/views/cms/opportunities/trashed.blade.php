@@ -1,7 +1,7 @@
 @extends('cms.admin.temp')
 
 @section('title', 'الفرص')
-@section('main-title', 'عرض الفرص')
+@section('main-title', 'الفرص المحذوفة')
 
 @section('styles')
 <style>
@@ -22,14 +22,14 @@
 
     {{-- زر الإضافة --}}
     <div class="page-actions" style="margin-bottom: 15px">
-        <a href="{{ route('opportunities.create') }}" class="btn btn-primary">
-            + إضافة فرصة
-        </a>
 
-         <a href="{{ route('opportunities_trashed') }}" class="btn btn-danger">
-            سلة المحذوفات
+        <a href="{{ route('opportunities.index') }}" class="btn btn-primary">
+            رجوع
         </a>
-
+        <a href="{{ route('opportunities_forceAll') }}" class="btn btn-danger">
+         حذف الجميع
+        </a>
+    </div>
     <div class="table-wrap">
         <table class="table" id="oppsTable">
             <thead>
@@ -77,16 +77,13 @@
                     <td class="actions">
 
                         {{-- عرض --}}
-                        <a href="{{ route('opportunities.show',$opportunity->id) }}"
-                           class="icon-btn" title="عرض">👁</a>
+                        <a href="{{ route('opportunities_restore',$opportunity->id) }}"
+                           class="icon-btn" title="استعادة">استعادة</a>
 
                         {{-- تعديل --}}
-                        <a href="{{ route('opportunities.edit',$opportunity->id) }}"
-                           class="icon-btn" title="تعديل">✏️</a>
+                        <a href="{{ route('opportunities_force',$opportunity->id) }}"
+                           class="icon-btn" title="حذف نهائي">حذف نهائي</a>
 
-                        {{-- حذف --}}
-                        <button class="icon-btn" title="حذف"
-                            onclick="performDestroy({{ $opportunity->id }} , this)">🗑️</button>
 
                     </td>
                 </tr>
@@ -99,10 +96,6 @@
         </table>
     </div>
 
-    {{-- Pagination --}}
-    <div style="margin-top: 15px">
-        {{ $opportunities->links() }}
-    </div>
 
 </main>
 @endsection

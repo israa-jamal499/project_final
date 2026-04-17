@@ -60,6 +60,10 @@ Route::prefix('cms/admin')->name('admin.')->group(function () {
 
  Route::resource('opportunities', OpportunityController::class);
  Route::post('opportunities_update/{id}',[ OpportunityController::class , 'update'])->name('opportunities_update');
+ Route::get('opportunities_trashed',[ OpportunityController::class , 'trashed'])->name('opportunities_trashed');
+ Route::get('opportunities_restore/{id}',[ OpportunityController::class , 'restore'])->name('opportunities_restore');
+ Route::get('opportunities_force/{id}',[ OpportunityController::class , 'force'])->name('opportunities_force');
+ Route::get('opportunities_forceAll',[ OpportunityController::class , 'forceAll'])->name('opportunities_forceAll');
 
 
 
