@@ -52,7 +52,23 @@ class ApplicationController extends Controller
      */
     public function update(Request $request, Application $application)
     {
-        //
+  
+   
+    $application->update(['status' => 'accepted']);
+
+   
+    
+    \App\Models\Internship::create([
+        'start_date'        => now(),
+        'status'            => 'active',
+        'required_hours'    => $application->opportunity->required_hours,
+        'students_id'       => $application->students_id,
+        'companies_id'      => $application->companies_id,
+        'opportunities_id'  => $application->opportunities_id,
+    ]);
+
+    return back()->with('success', 'تم قبول الطلب وبدء التدريب بنجاح');
+
     }
 
     /**
