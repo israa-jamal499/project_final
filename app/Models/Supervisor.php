@@ -30,4 +30,9 @@ class Supervisor extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function internships()
+    {
+        return $this->hasMany(Internships::class);
+    }
 }

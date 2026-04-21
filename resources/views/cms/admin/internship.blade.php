@@ -17,8 +17,7 @@
       </div>
 
       <div class="page-actions">
-        <button class="btn btn-outline" data-action="export">تصدير</button>
-        <button class="btn btn-primary" data-action="open-add-modal">+ إضافة تدريب</button>
+        <a href="{{ route('student.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> إضافة تدريب</a>
       </div>
     </div>
 

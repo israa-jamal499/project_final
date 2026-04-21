@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Database\Factories\OpportunityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Opportunity extends Model
 {
-    /** @use HasFactory<\Database\Factories\OpportunityFactory> */
-    use HasFactory ,SoftDeletes;
+    /** @use HasFactory<OpportunityFactory> */
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'description',
         'type',
@@ -22,7 +24,7 @@ class Opportunity extends Model
         'benefits',
         'title',
         'company_id',
-        'city_id'
+        'city_id',
     ];
 
     public function city()
@@ -35,14 +37,18 @@ class Opportunity extends Model
         return $this->belongsTo(Company::class);
     }
 
-     public function specializations()
+    public function specializations()
     {
-        return $this->belongsToMany(Specialization::class ,'opportunity_specializations');
+        return $this->belongsToMany(Specialization::class, 'opportunity_specializations');
     }
-     public function applications()
+
+    public function applications()
     {
         return $this->hasMany(Application::class);
     }
 
-
+    public function internships()
+    {
+        return $this->hasMany(Internships::class);
+    }
 }

@@ -40,4 +40,9 @@ class Company extends Model
     {
         return $this->hasMany(Opportunity::class);
     }
+
+    public function internships()
+    {
+        return $this->hasMany(Internships::class);
+    }
 }
