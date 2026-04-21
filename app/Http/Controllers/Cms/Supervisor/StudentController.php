@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cms\Supervisorms;
+namespace App\Http\Controllers\Cms\Supervisor;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
