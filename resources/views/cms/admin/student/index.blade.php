@@ -30,9 +30,9 @@
             <th>الرقم الجامعي</th>
             <th>التخصص</th>
             <th>الايميل</th>
-            <th>الشركة</th>
             <th>الحالة</th>
-            <th>الإجراءات</th>
+            <th>الشركة</th>
+         //   <th>الإجراءات</th>
     </tr>
 </thead>
       <tbody>
@@ -40,18 +40,16 @@
         <tr>
           <td>{{ $loop->iteration }}</td>
           <td><strong>{{ $student->name }}</strong></td>
-          <td><small style="color:var(--muted)">{{ $student->user->email }}</small></td>
           <td><code>{{ $student->university_id }}</code></td>
-          <td>{{ $student->college->name }}</td>
-          <td>{{ $student->supervisor->name ?? '—' }}</td>
-          <td>
-            @php $sb=['active'=>'badge-success','paused'=>'badge-warning','graduated'=>'badge-info','suspended'=>'badge-danger']; @endphp
-            <span class="badge {{ $sb[$student->status] ?? 'badge-gray' }}">{{ ['active'=>'نشط','paused'=>'موقوف','graduated'=>'خريج','suspended'=>'موقوف نهائياً'][$s->status] ?? $student->status }}</span>
-          </td>
-          <td>
-            <a href="{{ route('admin.students.show',$s) }}" class="btn btn-outline btn-sm"><i class="fa fa-eye"></i></a>
-            <a href="{{ route('admin.students.edit',$s) }}" class="btn btn-outline btn-sm"><i class="fa fa-edit"></i></a>
-            <form action="{{ route('admin.students.destroy',$s) }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطالب؟')">@csrf @method('DELETE')
+          <td>{{ $student->specialization->name }}</td>
+          <td><small style="color:var(--muted)">{{ $student->user->email }}</small></td>
+          <td>{{ $student->user->company->name ?? '—' }}</td>
+          <td>{{ $student->status }}</td>
+
+      //    <td>
+            <a href="{{ route('admin.students.show') }}" class="btn btn-outline btn-sm"><i class="fa fa-eye"></i></a>
+            <a href="{{ route('admin.students.edit') }}" class="btn btn-outline btn-sm"><i class="fa fa-edit"></i></a>
+            <form action="{{ route('admin.students.destroy') }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطالب؟')">@csrf @method('DELETE')
               <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
             </form>
           </td>
@@ -69,7 +67,7 @@
 @section('scripts')
 <script>
     function performDestroy(id , reference){
-        confirmDestroy('/cms/admin/student/' + id , reference);
+        confirmDestroy('/cms/admin/student/student' + id , reference);
     }
 </script>
 @endsection

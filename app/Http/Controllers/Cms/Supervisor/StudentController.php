@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Cms\Supervisorms;
+namespace App\Http\Controllers\Cms\Supervisor;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
+use App\Models\Image;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,9 +17,9 @@ class StudentController extends Controller
     public function index()
     {
         //
-        $students = Student::with('college')->orderBy('id')->paginate(4);
+        $students = Student::orderBy('id')->paginate(4);
 
-        return view('cms.supervisor.student.index', compact('students'));
+        return view('cms.admin.student.index', compact('students'));
     }
 
     /**
@@ -28,9 +29,8 @@ class StudentController extends Controller
     {
         //
         $colleges = College::all();
-        $users = User::all();
 
-        return view('cms.supervisor.student.create', compact('users', 'colleges'));
+        return response()->view('cms.admin.student.create', compact('colleges'));
     }
 
     /**
@@ -46,7 +46,6 @@ class StudentController extends Controller
             'address' => 'nullable|string',
             'birth_date' => 'required|date',
             'phone' => 'nullable|string|min:10|max:20',
-            'user->id' => 'required',
             'colleg->id' => 'required',
         ]);
 
@@ -58,9 +57,20 @@ class StudentController extends Controller
             $students->address = $request->get('address');
             $students->birth_date = $request->get('birth_date');
             $students->phone = $request->get('phone');
-            $students->user->id = $request->get('user->id');
             $students->colleg->id = $request->get('colleg->id');
             $isSaved = $students->save();
+            if ($isSaved) {
+                $user = new User;
+                $user->email = $request->get('email');
+                $user->password = $request->get('password');
+                $isSaved = $user->save();
+            }
+            if ($isSaved) {
+                $image = new Image;
+                $image->image = $request->get('image');
+                $image->actor()->associate($students);
+                $isSaved = $image->save();
+            }
 
             return response()->json([
                 'icon' => 'success',

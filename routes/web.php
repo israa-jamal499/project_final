@@ -7,15 +7,17 @@ use App\Http\Controllers\Cms\Admin\AsuperviosController;
 use App\Http\Controllers\Cms\Admin\CityController;
 use App\Http\Controllers\Cms\Admin\CollegeController;
 use App\Http\Controllers\Cms\Admin\SpecializationController;
-use App\Http\Controllers\Cms\Supervisorms\StudentController as SupervisormsStudentController;
 use App\Http\Controllers\CompanyprofileController;
 use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\OpportunityController;
-use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentprofileController;
 use App\Http\Controllers\StudentHourController;
 use App\Http\Controllers\WeeklyReportController;
 use App\Http\Controllers\InternshipController;
+
+// استيراد الكنترولرات المتشابهة في الأسماء بأسماء مستعارة فريدة
+use App\Http\Controllers\StudentController as FrontStudentController;
+use App\Http\Controllers\Cms\Supervisor\StudentController as SupervisorStudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,20 +39,13 @@ Route::prefix('front/auth')->group(function () {
     Route::get('/college-specializations/{college}', [AuthController::class, 'getCollegeSpecializations']);
 });
 
-// --- روابط الطالب () ---
+// --- روابط الطالب (Student) ---
 Route::prefix('front/student')->middleware('auth')->group(function () {
-    // صفحة التدريب الرئيسية ()
     Route::get('/internship', [InternshipController::class, 'index'])->name('front.student.internship');
-
-    // الساعات ()
     Route::get('/hours', [StudentHourController::class, 'index'])->name('front.student.hours');
     Route::post('/hours', [StudentHourController::class, 'store'])->name('hours.store');
-
-    // التقارير الأسبوعية ()
     Route::get('/weekly-reports', [WeeklyReportController::class, 'index'])->name('front.student.weekly-reports');
     Route::post('/weekly-reports', [WeeklyReportController::class, 'store'])->name('reports.store');
-
-    // بروفايل ولوحة تحكم الطالب ()
     Route::resource('editProfile', StudentprofileController::class);
     Route::get('/dashboard', function () { return view('front.student.dashboard'); })->name('front.student.dashboard');
     Route::get('/profile', function () { return view('front.student.profile'); })->name('front.student.profile');
@@ -58,22 +53,24 @@ Route::prefix('front/student')->middleware('auth')->group(function () {
     Route::get('/certificate', function () { return view('front.student.certificate'); })->name('front.student.certificate');
     Route::get('/notifications', function () { return view('front.student.notifications'); })->name('front.student.notifications');
     Route::get('/messages', function () { return view('front.student.massege'); })->name('front.student.massege');
+    
+    // استخدام الاسم المستعار الجديد للطالب
+    Route::resource('students', FrontStudentController::class);
 });
 
-// --- روابط المشرف () ---
+// --- روابط المشرف (Supervisor) ---
 Route::prefix('cms/supervisor')->middleware('auth')->group(function () {
-    // مراجعة التقارير ()
     Route::get('/weekly-reports', [WeeklyReportController::class, 'review'])->name('cms.supervisor.weekly-reports');
     Route::post('/weekly-reports/approve/{id}', [WeeklyReportController::class, 'approve'])->name('reports.approve');
-
-    // مهام المشرف الأخرى ()
-    Route::resource('Supervisormsstudent', SupervisormsStudentController::class);
     Route::get('/dashboard', function () { return view('cms.supervisor.dashboard'); })->name('cms.supervisor.dashboard');
     Route::get('/profile', function () { return view('cms.supervisor.profile'); })->name('cms.supervisor.profile');
     Route::get('/evaluation', function () { return view('cms.supervisor.evaluation'); })->name('cms.supervisor.evaluation');
+    
+    // استخدام الاسم المستعار الجديد للمشرف
+    Route::resource('Supervisormsstudent', SupervisorStudentController::class);
 });
 
-// --- روابط الشركة () ---
+// --- روابط الشركة (Company) ---
 Route::prefix('cms/company')->middleware('auth')->group(function () {
     Route::get('/dashboard', function () { return view('cms.company.dashboard'); })->name('cms.Company.dashboard');
     Route::get('/applications', function () { return view('cms.company.applications'); })->name('cms.Company.applications');
@@ -90,8 +87,11 @@ Route::prefix('cms/admin')->name('admin.')->middleware('auth')->group(function (
     Route::resource('colleges', CollegeController::class);
     Route::resource('specializations', SpecializationController::class);
     Route::resource('cities', CityController::class);
+    
+    Route::get('colleges/trashed', [CollegeController::class, 'trashed'])->name('colleges.trashed');
+    Route::get('colleges/restore/{id}', [CollegeController::class, 'restore'])->name('colleges.restore');
 });
 
-// روابط الفرص ()
+// روابط الفرص العامة
 Route::resource('opportunities', OpportunityController::class);
 Route::post('opportunities_update/{id}', [OpportunityController::class, 'update'])->name('opportunities_update');

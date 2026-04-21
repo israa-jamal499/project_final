@@ -1,7 +1,7 @@
 @extends('cms.admin.parent')
 
-@section('title','عرض الطلاب ')
-@section('main-title','عرض الطلاب')
+@section('title','عرض مشرف ')
+@section('main-title','عرض المشرفين')
 
 
 @section('content')
@@ -41,14 +41,12 @@
           <td>{{ $supervios->college->name }}</td>
           <td><small style="color:var(--muted)">{{ $supervios->user->email }}</small></td>
           <td><code>{{ $supervios->phone }}</code></td>
-          <td>{{ $supervios->users->whereNotNull('student')->count() }}</td>
+          <td>{{ $supervios->user->whereNotNull('student')->count() }}</td>
+          <td>{{ $company->user->student_count }}
+          <td>{{ $student->status }}</td>
 
-          <td><span class="badge {{ $supervios->is_active ? 'badge-success' : 'badge-gray' }}">{{ $supervios->is_active ? 'نشط' : 'موقوف' }}</span></td>
           <td>
-            <a href="{{ route('admin.students.show',$supervios) }}" class="btn btn-outline btn-sm"><i class="fa fa-eye"></i></a>
-            <a href="{{ route('admin.students.edit',$supervios) }}" class="btn btn-outline btn-sm"><i class="fa fa-edit"></i></a>
-            <form action="{{ route('admin.students.destroy',$s) }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطالب؟')">@csrf @method('DELETE')
-              <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            <form action="{{ route('admin.students.destroy') }}" method="POST" style="display:inline" onsubmit="return confirm('حذف الطالب؟')">@csrf @method('DELETE')
             </form>
           </td>
         </tr>

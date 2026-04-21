@@ -20,11 +20,12 @@
       @endif
       <div>
         <div style="font-size:18px;font-weight:700">{{ $company->name }}</div>
-        <div style="color:var(--muted);font-size:13px">{{ $user->email }}</div>
-        @if($company->field_name)<div style="font-size:12px;color:var(--muted);margin-top:4px"><i class="fa fa-briefcase" style="color:var(--primary)"></i> {{ $company->field_name }}</div>@endif
-        @if($company->city)<div style="font-size:12px;color:var(--muted)"><i class="fa fa-map-marker-alt" style="color:var(--primary)"></i> {{ $company->city->name }}</div>@endif
+        <div style="color:var(--muted);font-size:13px">{{ $company->user->email }}</div>
+        @if($company->field)<div style="font-size:12px;color:var(--muted);margin-top:4px"><i class="fa fa-briefcase" style="color:var(--primary)"></i> {{ $company->field }}</div>@endif
+        @if($company->city->ciyt_name)<div style="font-size:12px;color:var(--muted)"><i class="fa fa-map-marker-alt" style="color:var(--primary)"></i> {{ $company->city->name }}</div>@endif
       </div>
     </div>
+    {{ old('email', $company->user->email ?? '') }}
 
     {{-- المشرفون المرتبطون --}}
     @if($company->supervisors->count())
@@ -33,8 +34,8 @@
       <div style="display:flex;flex-wrap:wrap;gap:10px">
         @foreach($company->supervisors as $sup)
         <div style="background:#f0f7ff;border:1px solid #dbeafe;border-radius:10px;padding:8px 14px;display:flex;align-items:center;gap:10px;font-size:13px">
-          <div style="width:34px;height:34px;border-radius:50%;background:#3e7cd7;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">{{ mb_substr($sup->full_name,0,1) }}</div>
-          <div><div style="font-weight:600">{{ $sup->full_name }}</div><div style="font-size:11px;color:var(--muted)">{{ $sup->college->name ?? '' }}</div></div>
+          <div style="width:34px;height:34px;border-radius:50%;background:#3e7cd7;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">{{ mb_substr($sup->name,0,1) }}</div>
+          <div><div style="font-weight:600">{{ $sup->name }}</div><div style="font-size:11px;color:var(--muted)">{{ $sup->college->name ?? '' }}</div></div>
           <span class="badge {{ $sup->pivot->status=='active'?'badge-success':'badge-gray' }}">{{ $sup->pivot->status=='active'?'نشط':'موقوف' }}</span>
         </div>
         @endforeach
@@ -65,7 +66,7 @@
         <div class="form-group">
           <label class="form-label">مجال العمل</label>
           <div class="input-wrap"><i class="fa fa-briefcase"></i>
-            <input type="text" name="field_name" class="form-control" value="{{ $company->field_name }}">
+            <input type="text" name="field" class="form-control" value="{{ $company->field }}">
           </div>
         </div>
       </div>
@@ -77,13 +78,17 @@
             <input type="url" name="website" class="form-control" value="{{ $company->website }}">
           </div>
         </div>
+         <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" value="{{ $company->user->email ?? '' }}">
+                    </div>
         <div class="form-group">
           <label class="form-label">المدينة</label>
           <div class="input-wrap"><i class="fa fa-map-marker-alt"></i>
             <select name="cities_id" class="form-control form-select">
               <option value="">اختر</option>
-              @foreach($cities as $cities)
-              <option value="{{ $cities->id }}" {{ $company->cities_id==$c->id?'selected':'' }}>{{ $cities->name }}</option>
+              @foreach($city as $city)
+              <option value="{{ $city->id }}" {{ $company->city_id==$c->id?'selected':'' }}>{{ $city->name }}</option>
               @endforeach
             </select>
           </div>
@@ -129,10 +134,16 @@
 <script>
     unction performUpdate(id){
         let formData=new FormData();
+        formData.append('logo',document.getElementById('logo').value);
         formData.append('name',document.getElementById('name').value);
-        formData.append('street',document.getElementById('street').value);
-        formData.append('country_id', document.getElementById('country_id').value);
-        storeRoute('/cms/admin/cities_update/'+id,formData);
+        formData.append('field',document.getElementById('field').value);
+        formData.append('website',document.getElementById('website').value);
+       formData.append('user_id',document.getElementById('user_id').value);
+        formData.append('city->id',document.getElementById('city->id').value);
+        formData.append('address',document.getElementById('address').value);
+        formData.append('description',document.getElementById('description').value);
+
+        storeRoute('/cms/supervisor_update/'+id,formData);
     }
 document.getElementById('logo').addEventListener('change',function(){
   document.getElementById('logoName').textContent = this.files[0]?.name ?? 'لم يتم اختيار ملف';
