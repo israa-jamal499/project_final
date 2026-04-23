@@ -43,6 +43,6 @@ class Student extends Model
 
     public function internships()
     {
-        return $this->hasMany(Internships::class);
+        return $this->hasMany(Internship::class);
     }
 }

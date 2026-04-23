@@ -1,110 +1,131 @@
 @extends('cms.admin.parent')
-
-@section('title','اضافة تدريب')
-@section('main-title','اضافة تدريب')
-
-
+@section('title', 'إضافة تدريب جديد')
+@section('main-title', 'إدارة التدريب')
+@section('sub-title', 'إضافة تدريب جديد')
+ 
 @section('content')
-<div class="card card-primary">
+<div class="card">
     <div class="card-header">
-        <h3 class="card-title">اضافة تدريب جديد</h3>
+        <h3 class="card-title">إضافة تدريب جديد</h3>
+        <a href="{{ route('admin.internships.index') }}" class="btn btn-secondary btn-sm float-left">
+            <i class="fa fa-arrow-right"></i> رجوع
+        </a>
     </div>
-
-    <form>
-        @csrf
-        <div class="card-body">
+ 
+    <div class="card-body">
+        @if($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+ 
+        <form action="{{ route('admin.internships.store') }}" method="POST">
+            @csrf
             <div class="row">
-                <div class="form-group col-md-6">
-                    <label>اسم الطالب </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="student_id" name="student_id" style="width: 100%;">
-                    @foreach ($students as $student)
-                        <option value="{{ $student->id }}" {{ $internships->student_id == $student->id ? 'selected' : '' }}>
-                              {{ $student->student_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                 </div>
-
-                <div class="form-group">
-                  <label>القسم  </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="college_id" name="college_id" style="width: 100%;">
-                    {{-- <option selected="selected">Alabama</option> --}}
-                    @foreach ($colleges as $colleg )
-                        <option value="{{ $colleg->id }}">{{ $colleg->colleg_name }}</option>
-                    @endforeach
-
-
-                  </select>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الطالب <span class="text-danger">*</span></label>
+                        <select name="student_id" class="form-control" required>
+                            <option value="">-- اختر الطالب --</option>
+                            @foreach($students as $student)
+                                <option value="{{ $student->id }}">{{ $student->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-
-                <div class="form-group col-md-6">
-                     <label>اسم الشركة</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="company_id" name="company_id" style="width: 100%;">
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}" {{ $internships->company_id == $company->id ? 'selected' : '' }}>
-                              {{ $company->company_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                 </div>
-                <div class="form-group col-md-6">
-                    <label>اسم المشرف</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="supervisor_id" name="supervisor_id" style="width: 100%;">
-                    @foreach ($supervisors as $supervisor)
-                        <option value="{{ $supervisor->id }}" {{ $internships->supervisor_id == $supervisor->id ? 'selected' : '' }}>
-                              {{ $supervisor->supervisor_name }}
-                        </option>
-                    @endforeach
-                  </select>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الشركة <span class="text-danger">*</span></label>
+                        <select name="company_id" class="form-control" required>
+                            <option value="">-- اختر الشركة --</option>
+                            @foreach($companies as $company)
+                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="name">تاريخ البداية</label>
-                    <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Enter start date">
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>المشرف <span class="text-danger">*</span></label>
+                        <select name="supervisor_id" class="form-control" required>
+                            <option value="">-- اختر المشرف --</option>
+                            @foreach($supervisors as $supervisor)
+                                <option value="{{ $supervisor->id }}">{{ $supervisor->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="name">تاريخ النهاية</label>
-                    <input type="date" class="form-control" id="end_date" name="end_date" placeholder="Enter end date">
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الكلية</label>
+                        <select name="college_id" class="form-control">
+                            <option value="">-- اختر الكلية --</option>
+                            @foreach($colleges as $college)
+                                <option value="{{ $college->id }}">{{ $college->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label class="form-label">الحالة</label>
-        <select name="status" class="form-control form-select">
-          @foreach(['active'=>'نشط','paused'=>'موقوف','completed'=>'مكتمل','terminated'=>'منتهي'] as $v=>$l)
-          <option value="{{ $v }}" {{ $internship->status==$v?'selected':'' }}>{{ $l }}
-            </option>@endforeach
-        </select>
-     </div>
-                 <div class="form-group col-md-6">
-                    <label for="name">ملاحظات</label>
-                    <input type="text" class="form-control" id="notes" name="notes" placeholder="Enter notes">
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>تاريخ البداية <span class="text-danger">*</span></label>
+                        <input type="date" name="start_date" class="form-control" required>
+                    </div>
                 </div>
-
-
-              </div>
-
-
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>تاريخ النهاية</label>
+                        <input type="date" name="end_date" class="form-control">
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الساعات المطلوبة <span class="text-danger">*</span></label>
+                        <input type="number" name="required_hours" class="form-control"
+                               placeholder="مثال: 120" min="1" required>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <select name="status" class="form-control">
+                            <option value="active">قيد التدريب</option>
+                            <option value="paused">متوقف مؤقتاً</option>
+                            <option value="completed">مكتمل</option>
+                            <option value="terminated">منتهي</option>
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>ملاحظات</label>
+                        <textarea name="notes" class="form-control" rows="3"
+                                  placeholder="أي ملاحظات إضافية..."></textarea>
+                    </div>
+                </div>
+ 
             </div>
-        </div>
-
-        <div class="card-footer">
-            <button type="button" onclick="performStore()" class="btn btn-primary">Store</button>
-            <a href="{{ route('student.index') }}" class="btn btn-secondary">Go Back</a>
-        </div>
-    </form>
+ 
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> حفظ التدريب
+                </button>
+                <a href="{{ route('admin.internships.index') }}" class="btn btn-secondary mr-2">إلغاء</a>
+            </div>
+        </form>
+    </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    function performStore(){
-        let formData = new FormData();
-        formData.append('student_id', document.getElementById('student_id').value);
-        formData.append('colleg->id', document.getElementById('colleg->id').value);
-        formData.append('company_id', document.getElementById('company_id').value);
-        formData.append('supervisor_id', document.getElementById('supervisor_id').value);
-        formData.append('start_date', document.getElementById('start_date').value);
-        formData.append('end_date', document.getElementById('end_date').value);
-        formData.append('status',document.getElementById('status').value);
-        store('/front/student/student', formData);
-    }
-</script>
 @endsection

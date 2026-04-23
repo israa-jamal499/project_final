@@ -37,6 +37,7 @@ Route::prefix('front/auth')->group(function () {
     Route::get('/register-company', function () { return view('front.auth.register-company'); })->name('front.auth.register-company');
     Route::get('/register-student', [AuthController::class, 'registerStudent'])->name('front.auth.register-student');
     Route::get('/college-specializations/{college}', [AuthController::class, 'getCollegeSpecializations']);
+    
 });
 
 // --- روابط الطالب (Student) ---
@@ -44,6 +45,7 @@ Route::prefix('front/student')->middleware('auth')->group(function () {
     Route::get('/internship', [InternshipController::class, 'index'])->name('front.student.internship');
     Route::get('/hours', [StudentHourController::class, 'index'])->name('front.student.hours');
     Route::post('/hours', [StudentHourController::class, 'store'])->name('hours.store');
+    Route::delete('/hours/{id}', [StudentHourController::class, 'destroy'])->name('hours.destroy');
     Route::get('/weekly-reports', [WeeklyReportController::class, 'index'])->name('front.student.weekly-reports');
     Route::post('/weekly-reports', [WeeklyReportController::class, 'store'])->name('reports.store');
     Route::resource('editProfile', StudentprofileController::class);
@@ -87,6 +89,14 @@ Route::prefix('cms/admin')->name('admin.')->middleware('auth')->group(function (
     Route::resource('colleges', CollegeController::class);
     Route::resource('specializations', SpecializationController::class);
     Route::resource('cities', CityController::class);
+    Route::get('internships', [InternshipController::class, 'adminIndex'])->name('internships.index');
+Route::get('internships/create', [InternshipController::class, 'create'])->name('internships.create');
+Route::post('internships', [InternshipController::class, 'store'])->name('internships.store');
+Route::get('internships/{id}/edit', [InternshipController::class, 'edit'])->name('internships.edit');
+Route::put('internships/{id}', [InternshipController::class, 'update'])->name('internships.update');
+Route::delete('internships/{id}', [InternshipController::class, 'destroy'])->name('internships.destroy');
+Route::get('internships/{id}', [InternshipController::class, 'show'])->name('internships.show');
+Route::post('internships/hours/{id}/approve', [InternshipController::class, 'approveHour'])->name('hours.approve');
     
     Route::get('colleges/trashed', [CollegeController::class, 'trashed'])->name('colleges.trashed');
     Route::get('colleges/restore/{id}', [CollegeController::class, 'restore'])->name('colleges.restore');

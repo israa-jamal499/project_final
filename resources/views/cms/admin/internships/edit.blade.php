@@ -1,117 +1,145 @@
 @extends('cms.admin.parent')
-
-@section('title','Edit internships')
-
-@section('main-title','Edit internships')
-
-@section('sub-title','Edit internships')
-
-@section('styles')
-@endsection
-
+@section('title', 'تعديل التدريب')
+@section('main-title', 'إدارة التدريب')
+@section('sub-title', 'تعديل التدريب')
+ 
 @section('content')
-<div class="card card-primary">
+<div class="card">
     <div class="card-header">
-        <h3 class="card-title">تعديل التدريب</h3>
+        <h3 class="card-title">تعديل بيانات التدريب</h3>
+        <a href="{{ route('admin.internships.index') }}" class="btn btn-secondary btn-sm float-left">
+            <i class="fa fa-arrow-right"></i> رجوع
+        </a>
     </div>
-
-    <form>
-        @csrf
-        <div class="card-body">
-            <div class="form-group">
-                 <div class="form-group">
-                  <label>اسم الطالب </label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="student_id" name="student_id" style="width: 100%;">
-                    @foreach ($students as $student)
-                        <option value="{{ $student->id }}" {{ $internships->student_id == $student->id ? 'selected' : '' }}>
-                              {{ $student->student_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                </div>
-            </div>
-            <div class="form-group">
-                 <div class="form-group">
-                  <label>القسم</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="college_id" name="college_id" style="width: 100%;">
-                    @foreach ($colleges as $college)
-                        <option value="{{ $college->id }}" {{ $internships->college_id == $college->id ? 'selected' : '' }}>
-                              {{ $college_id->college_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                </div>
-            </div>
-            <div class="form-group">
-                 <div class="form-group">
-                  <label>اسم الشركة</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="company_id" name="company_id" style="width: 100%;">
-                    @foreach ($companies as $company)
-                        <option value="{{ $company->id }}" {{ $internships->company_id == $company->id ? 'selected' : '' }}>
-                              {{ $company->company_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                </div>
-            </div>
-            <div class="form-group">
-                 <div class="form-group">
-                  <label>اسم المشرف</label>
-                  <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="supervisor_id" name="supervisor_id" style="width: 100%;">
-                    @foreach ($supervisors as $supervisor)
-                        <option value="{{ $supervisor->id }}" {{ $internships->supervisor_id == $supervisor->id ? 'selected' : '' }}>
-                              {{ $supervisor->supervisor_name }}
-                        </option>
-                    @endforeach
-                  </select>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="name"> تاريخ البداية</label>
-                <input type="data" class="form-control" id="start_date"
-                       value="{{ $internships->start_date }}" name="start_date"
-                       placeholder="Enter start date">
-            </div>
-            <div class="form-group">
-                <label for="name">تاريخ النهاية </label>
-                <input type="data" class="form-control" id="end_date"
-                       value="{{ $internships->end_date }}" name="end_date"
-                       placeholder="Enter end date">
-            </div>
-
-            <div class="form-group">
-        <label class="form-label">الحالة</label>
-        <select name="status" class="form-control form-select">
-          @foreach(['active'=>'نشط','paused'=>'موقوف','completed'=>'مكتمل','terminated'=>'منتهي'] as $v=>$l)
-          <option value="{{ $v }}" {{ $internships->status==$v?'selected':'' }}>{{ $l }}
-            </option>@endforeach
-        </select>
-      </div>
+ 
+    <div class="card-body">
+        @if($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-
-        <div class="card-footer">
-            <button type="button" onclick="performUpdate({{ $internships->id }})" class="btn btn-primary">Update</button>
-            <a href="{{ route('admin.colleges.index') }}" class="btn btn-secondary">Go Back</a>
-        </div>
-    </form>
+        @endif
+ 
+        <form action="{{ route('admin.internships.update', $internship->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="row">
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الطالب <span class="text-danger">*</span></label>
+                        <select name="student_id" class="form-control" required>
+                            <option value="">-- اختر الطالب --</option>
+                            @foreach($students as $student)
+                                <option value="{{ $student->id }}"
+                                    {{ $internship->student_id == $student->id ? 'selected' : '' }}>
+                                    {{ $student->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الشركة <span class="text-danger">*</span></label>
+                        <select name="company_id" class="form-control" required>
+                            <option value="">-- اختر الشركة --</option>
+                            @foreach($companies as $company)
+                                <option value="{{ $company->id }}"
+                                    {{ $internship->company_id == $company->id ? 'selected' : '' }}>
+                                    {{ $company->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>المشرف <span class="text-danger">*</span></label>
+                        <select name="supervisor_id" class="form-control" required>
+                            <option value="">-- اختر المشرف --</option>
+                            @foreach($supervisors as $supervisor)
+                                <option value="{{ $supervisor->id }}"
+                                    {{ $internship->supervisor_id == $supervisor->id ? 'selected' : '' }}>
+                                    {{ $supervisor->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الكلية</label>
+                        <select name="college_id" class="form-control">
+                            <option value="">-- اختر الكلية --</option>
+                            @foreach($colleges as $college)
+                                <option value="{{ $college->id }}"
+                                    {{ $internship->college_id == $college->id ? 'selected' : '' }}>
+                                    {{ $college->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>تاريخ البداية <span class="text-danger">*</span></label>
+                        <input type="date" name="start_date" class="form-control"
+                               value="{{ $internship->start_date }}" required>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>تاريخ النهاية</label>
+                        <input type="date" name="end_date" class="form-control"
+                               value="{{ $internship->end_date }}">
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الساعات المطلوبة <span class="text-danger">*</span></label>
+                        <input type="number" name="required_hours" class="form-control"
+                               value="{{ $internship->required_hours }}" min="1" required>
+                    </div>
+                </div>
+ 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <select name="status" class="form-control">
+                            <option value="active" {{ $internship->status == 'active' ? 'selected' : '' }}>قيد التدريب</option>
+                            <option value="paused" {{ $internship->status == 'paused' ? 'selected' : '' }}>متوقف مؤقتاً</option>
+                            <option value="completed" {{ $internship->status == 'completed' ? 'selected' : '' }}>مكتمل</option>
+                            <option value="terminated" {{ $internship->status == 'terminated' ? 'selected' : '' }}>منتهي</option>
+                        </select>
+                    </div>
+                </div>
+ 
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>ملاحظات</label>
+                        <textarea name="notes" class="form-control" rows="3">{{ $internship->notes }}</textarea>
+                    </div>
+                </div>
+ 
+            </div>
+ 
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> حفظ التعديلات
+                </button>
+                <a href="{{ route('admin.internships.index') }}" class="btn btn-secondary mr-2">إلغاء</a>
+            </div>
+        </form>
+    </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    function performUpdate(id){
-        let formData = new FormData();
-        formData.append('student_id', document.getElementById('student_id').value);
-        formData.append('college_id', document.getElementById('college_id').value);
-        formData.append('company_id', document.getElementById('company_id').value);
-        formData.append('supervisor_id', document.getElementById('supervisor_id').value);
-        formData.append('start_date', document.getElementById('start_date').value);
-        formData.append('end_date', document.getElementById('end_date').value);
-        formData.append('status', document.getElementById('status').value);
-
-        storeRoute('/cms/admin/specializations/' + id, formData);
-    }
-</script>
 @endsection

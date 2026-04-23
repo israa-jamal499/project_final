@@ -1,12 +1,11 @@
 <?php
-
+ 
 namespace App\Models;
-
+ 
 use Illuminate\Database\Eloquent\Model;
-
+ 
 class Internship extends Model
 {
-    //
     protected $fillable = [
         'start_date',
         'end_date',
@@ -16,35 +15,47 @@ class Internship extends Model
         'total_hours',
         'notes',
         'tasks',
-        'students_id',
-        'companies_id',
-        'supervisors_id',
-        'opportunities_id',
-        'applications_id',
+        'student_id',
+        'company_id',
+        'supervisor_id',
+        'opportunity_id',
+        'application_id',
+        'college_id',
     ];
-
+ 
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
-
+ 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
-
+ 
     public function supervisor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Supervisor::class);
     }
-
+ 
     public function opportunity()
     {
         return $this->belongsTo(Opportunity::class);
     }
-
+ 
     public function application()
     {
         return $this->belongsTo(Application::class);
     }
+ 
+    public function hours()
+    {
+        return $this->hasMany(StudentHour::class);
+    }
+ 
+    public function weeklyReports()
+    {
+        return $this->hasMany(WeeklyReport::class);
+    }
 }
+ 
